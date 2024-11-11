@@ -22,7 +22,12 @@ public class StudentServiceImplementation implements StudentService {
     public List<Student> getAllStudent() {
         return studentRepo.findAll();
     }
+
     //get employee using id
+    @Override
+    public List<Student> getAllStudentByEnrollment(String enrollmentYear) {
+        return studentRepo.findByYearOfEnrollment(enrollmentYear);
+    }
     @Override
     public Student getStudentById(Long id) {
         Optional<Student> student = studentRepo.findById(id);
@@ -49,5 +54,14 @@ public class StudentServiceImplementation implements StudentService {
     public void deleteStudent(Long id) {
         studentRepo.findById(id).orElseThrow(() -> new RuntimeException());
         studentRepo.deleteById(id);
+    }
+
+    @Override
+    public String getDepartmentByStudentId(Long studentId){
+        return studentRepo.findDepartmentByStudentId(studentId);
+    }
+    @Override
+    public void removeStudentsByEnrollmentYear(String enrollmentYear) {
+        studentRepo.deleteByEnrollmentYear(enrollmentYear);
     }
 }

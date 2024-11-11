@@ -29,8 +29,13 @@ public class StudentController {
 
     //Get by Id Rest Api
     @GetMapping("/getById/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable("id") long employeeID){
-        return new ResponseEntity<Student>(studentServiceImplementation.getStudentById(employeeID),HttpStatus.OK);
+    public ResponseEntity<Student> getStudentById(@PathVariable("id") long studentID){
+        return new ResponseEntity<Student>(studentServiceImplementation.getStudentById(studentID),HttpStatus.OK);
+    }
+    @GetMapping("/getByYear/{year}")
+    public ResponseEntity<List<Student>> getAllStudentByEnrollment(@PathVariable("year") String enrollmentYear){
+        List<Student> students = studentServiceImplementation.getAllStudentByEnrollment(enrollmentYear);
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
@@ -43,6 +48,22 @@ public class StudentController {
     public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id){
         studentServiceImplementation.deleteStudent(id);
         return new ResponseEntity<String>("Student deleted Successfully.",HttpStatus.OK);
+    }
+
+    @GetMapping("/getByDepartment/{studentId}")
+    public ResponseEntity<String> getDepartmentByStudentId(@PathVariable ("studentId") Long studentId){
+        String departmentName = studentServiceImplementation.getDepartmentByStudentId(studentId);
+        if (departmentName != null){
+            return ResponseEntity.ok(departmentName);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/deleteByYear/{year}")
+    public ResponseEntity<String> deleteByEnrollmentYear(@PathVariable ("year") String enrollmentYear){
+        studentServiceImplementation.removeStudentsByEnrollmentYear(enrollmentYear);
+        return ResponseEntity.ok("Students enrolled in " + enrollmentYear +" have been deleted.");
     }
 
 }
